@@ -32,7 +32,16 @@ nn = neural_network(2,1)
 learning_rate = 0.0001
 epoch_num = 500000
 
+# training loop
 for i in range(epoch_num):
   out = nn.forward_pass(train_x)
   nn.back_prop(train_x, train_y, out, learning_rate)
+
+# testing
+test_output = nn.forward_pass(test_x)
+nn.compute_loss(test_output,test_y)
+# Example predictions
+for i in range(100):
+    print(f'Input: {test_x[i] * 100}, Prediction: {test_output[i][0] * 100:.2f}, Actual: {test_y[i][0] * 100:.2f}')
+
 
