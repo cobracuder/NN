@@ -1,0 +1,38 @@
+import numpy as np
+
+def generate_data(num_samples):
+    x = np.random.randint(0, 10, (num_samples, 2))
+    y = np.sum(x, axis=1, keepdims=True)
+    return x, y
+
+train_x, train_y = generate_data(2000)
+test_x, test_y = generate_data(100)
+
+class neural_network:
+  def __init__(self, input_size, output_size):    
+    self.W = np.random.randn(input_size, output_size)
+    self.B = np.zeros((1, output_size))
+  
+  def compute_loss(self, label, predicted):
+    return 0.5 * np.mean((predicted - label) ** 2)
+
+  def forward_pass(self, X):
+    self.Z = np.dot(X, self.W) + self.B
+    return self.Z
+  
+  def back_prop(self, X, Y, output, learning_rate):
+    m = X.shape[0]
+    dz = output - Y
+    dw = np.dot(X.T, dz) / m
+    db = np.sum(dz, axis = 0, keepdims = True) / m
+    self.W -= learning_rate * dw
+    self.B -= learning_rate * db
+
+nn = neural_network(2,1)
+learning_rate = 0.0001
+epoch_num = 500000
+
+for i in range(epoch_num):
+  out = nn.forward_pass(train_x)
+  nn.back_prop(train_x, train_y, out, learning_rate)
+
